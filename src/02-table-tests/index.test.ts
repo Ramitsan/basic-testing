@@ -1,7 +1,9 @@
 // Uncomment the code below and write your tests
 import { simpleCalculator, Action } from './index';
 
-const testCases: Array<[{ a: any; b: any; action: any }, number | null]> = [
+const testCases: Array<
+  [{ a: number | string; b: number; action: Action | string }, number | null]
+> = [
   [{ a: 1, b: 2, action: Action.Add }, 3],
   [{ a: 2, b: 2, action: Action.Add }, 4],
   [{ a: 3, b: 2, action: Action.Add }, 5],

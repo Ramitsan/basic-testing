@@ -1,10 +1,16 @@
 // Uncomment the code below and write your tests
-import { throwError, throwCustomError, resolveValue, MyAwesomeError, rejectCustomError } from './index';
+import {
+  throwError,
+  throwCustomError,
+  resolveValue,
+  MyAwesomeError,
+  rejectCustomError,
+} from './index';
 
 describe('resolveValue', () => {
   test('should resolve provided value', async () => {
     // Write your test here
-    const value = await resolveValue(123)
+    const value = await resolveValue(123);
     expect(value).toBe(123);
   });
 });
@@ -20,8 +26,7 @@ describe('throwError', () => {
     try {
       throwError();
       throw new Error('should throw error');
-    }
-    catch(err) {
+    } catch (err) {
       expect((err as Error).message).toBe('Oops!');
     }
   });
@@ -33,8 +38,7 @@ describe('throwCustomError', () => {
     try {
       throwCustomError();
       throw new Error('should throw error');
-    }
-    catch(err) {
+    } catch (err) {
       expect(err).toBeInstanceOf(MyAwesomeError);
     }
   });
@@ -46,8 +50,7 @@ describe('rejectCustomError', () => {
     try {
       await rejectCustomError();
       throw new Error('should throw error');
-    }
-    catch(err) {
+    } catch (err) {
       expect(err).toBeInstanceOf(MyAwesomeError);
     }
   });

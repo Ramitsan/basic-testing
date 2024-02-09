@@ -1,6 +1,8 @@
 // Uncomment the code below and write your tests
-// import fs from "fs/promises";
-import { readFileAsynchronously, /* doStuffByTimeout, doStuffByInterval */ } from '.';
+import {
+  readFileAsynchronously,
+  doStuffByTimeout /*doStuffByInterval */,
+} from '.';
 
 describe('doStuffByTimeout', () => {
   beforeAll(() => {
@@ -13,10 +15,26 @@ describe('doStuffByTimeout', () => {
 
   test('should set timeout with provided callback and timeout', () => {
     // Write your test here
+    const spy = jest.spyOn(global, 'setTimeout');
+    doStuffByTimeout(jest.fn(), 1000);
+    expect(spy.mock.calls.length).toBe(1);
+    expect(setTimeout).toHaveBeenLastCalledWith(expect.any(Function), 1000);
   });
 
   test('should call callback only after timeout', () => {
     // Write your test here
+    const callback = jest.fn();
+    doStuffByTimeout(callback, 1000);
+
+    // At this point in time, the callback should not have been called yet
+    expect(callback).not.toHaveBeenCalled();
+
+    // Fast-forward until all timers have been executed
+    jest.runAllTimers();
+
+    // Now our callback should have been called!
+    expect(callback).toHaveBeenCalled();
+    expect(callback).toHaveBeenCalledTimes(1);
   });
 });
 
@@ -38,32 +56,32 @@ describe('doStuffByInterval', () => {
   });
 });
 
-jest.mock("fs/promises", () => {
+jest.mock('fs/promises', () => {
   return {
-    readFile: async (path: string)=>{
+    readFile: async (path: string) => {
       expect(path).toBe('correctPath');
-      return "data";
-    }
+      return 'data';
+    },
   };
 });
 
-jest.mock("fs", () => {
+jest.mock('fs', () => {
   return {
-    existsSync: (path: string)=>{
-      return path === "correctPath";
-    }
+    existsSync: (path: string) => {
+      return path === 'correctPath';
+    },
   };
 });
 
 let isJoinCalled = false;
 
-jest.mock("path", () => {
+jest.mock('path', () => {
   return {
-    join: (...paths: string[])=>{
+    join: (...paths: string[]) => {
       isJoinCalled = true;
       expect(typeof paths[1]).not.toBe('undefined');
       return paths[1];
-    }
+    },
   };
 });
 
@@ -76,13 +94,13 @@ describe('readFileAsynchronously', () => {
 
   test('should return null if file does not exist', async () => {
     // Write your test here
-    const result = await readFileAsynchronously('wrongPath'); 
+    const result = await readFileAsynchronously('wrongPath');
     expect(result).toBe(null);
   });
 
   test('should return file content if file exists', async () => {
     // Write your test here
-    const result = await readFileAsynchronously('correctPath'); 
+    const result = await readFileAsynchronously('correctPath');
     expect(result).toBe('data');
   });
 });
